@@ -12,7 +12,7 @@ export const BoxMaker = (position) => {
 export const CubeRotation = (cube) => {
   const cubes = Array.isArray(cube) ? cube : [cube]
   cubes.forEach(_cube => {
-    _cube.rotation.x += 0.02
+    _cube.rotation.x += 0.005
     // _cube.rotation.y += 0.01
     // _cube.rotation.z += 0.01
   })

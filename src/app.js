@@ -1,20 +1,20 @@
-import * as THREE from "three"
+// import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 
 import "./app.scss"
 
 import { resizeHandler } from "./feature/display-handler"
 import { SceneInit } from "./feature/scene-init"
-import { GlbLoader } from "./feature/glb-loader"
 
 import { CubeRotation } from "./makers/box-maker"
 import { LightMaker } from "./makers/light-maker"
 import { GroundMaker } from "./makers/ground-maker"
+import { TreesMaker } from "./makers/trees-maker"
 
 /** @type {'Orthographic'|'Perspective'} */
 let cameraType = "Perspective"
 
-/** @type {THREE.Group} */
+/** @type {THREE.Mesh} */
 let trees
 
 let isRotation = true
@@ -27,45 +27,32 @@ const { scene, camera, renderer } = SceneInit(
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enabled = true
 
-scene.add(...LightMaker(), GroundMaker())
+scene.add(
+  ...LightMaker(),
+  GroundMaker()
+)
 
 resizeHandler(camera, renderer, cameraDistance)
 animate()
 
-document.getElementById("toggleControl").onclick = () => {
-  controls.enabled = !controls.enabled
-}
-document.getElementById("toggleRotation").onclick = () => {
+BtnCallback('toggleControl', () => controls.enabled = !controls.enabled)
+BtnCallback('toggleRotation', () => isRotation = !isRotation);
+window.addEventListener('keyup', (keyEvent) => {
+  if(keyEvent.key != ' ') return
   isRotation = !isRotation
-}
+});
 
-const loader = GlbLoader()
-
-loader.load("assets/trees.glb", (glb) => {
-  trees = glb.scene
-
-  const format = THREE.RedFormat
-  const colors = new Uint8Array(4)
-  for (let c = 0; c <= colors.length; c++) {
-    colors[c] = (c / colors.length) * 256
-  }
-  const gradientMap = new THREE.DataTexture(colors, colors.length, 1, format)
-  gradientMap.needsUpdate = true
-  
-  const geo = new THREE.BoxGeometry(1, 1, 1)
-  const material = new THREE.MeshToonMaterial()
-  material.gradientMap = gradientMap
-  material.color = '#009600'
-
-  const mesh = new THREE.Mesh(geo, material)
-  
-  trees.add(mesh)
-  trees.position.set(0, 0, 0)
+(async () => {
+  trees = await TreesMaker()
   scene.add(trees)
-})
+})()
 
 function animate() {
   if(isRotation && trees) CubeRotation(trees)
   requestAnimationFrame(animate)
   renderer.render(scene, camera)
+}
+
+function BtnCallback(id, callback) {
+  document.getElementById(id).onclick = callback
 }
