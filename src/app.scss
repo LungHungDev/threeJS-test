@@ -3,3 +3,10 @@ html, body {
   padding: 0;
   background: #282c34;
 }
+
+.btn-grouop {
+  position: absolute;
+  left: 50%;
+  top: 1em;
+  transform: translateX(-50%);
+}

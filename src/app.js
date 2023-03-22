@@ -1,39 +1,71 @@
-import * as THREE from 'three'
-import './app.scss'
-import { resizeHandler } from './display-handler'
-import { SceneInit } from './scene-init'
-import { BoxMaker, CubeRotation } from './box-maker'
-import { LightMaker } from './light-maker'
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import * as THREE from "three"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 
-const distance = 150
-const { scene, camera, renderer } = SceneInit(distance)
+import "./app.scss"
 
-let controlStatus = true
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enabled = controlStatus
+import { resizeHandler } from "./feature/display-handler"
+import { SceneInit } from "./feature/scene-init"
+import { GlbLoader } from "./feature/glb-loader"
 
-const cubes = [BoxMaker(-1.2), BoxMaker(1.2)]
-scene.add(...cubes)
+import { CubeRotation } from "./makers/box-maker"
+import { LightMaker } from "./makers/light-maker"
+import { GroundMaker } from "./makers/ground-maker"
 
-const lights = LightMaker()
-scene.add(...lights)
+/** @type {'Orthographic'|'Perspective'} */
+let cameraType = "Perspective"
 
-const geometry = new THREE.PlaneGeometry(100, 100, 1, 1)
-const material = new THREE.ShadowMaterial({ opacity: 0.4 })
+/** @type {THREE.Group} */
+let trees
 
-const plane = new THREE.Mesh(geometry, material)
-plane.castShadow = true
-plane.receiveShadow = true
-plane.rotation.set(-Math.PI/2, 0, 0)
-plane.position.set(0, -1.05, 0)
-scene.add(plane)
+let isRotation = true
+const cameraDistance = 150
 
-resizeHandler(camera, renderer, distance)
+const { scene, camera, renderer } = SceneInit(
+  cameraType == "Orthographic" ? cameraDistance : null
+)
+
+const controls = new OrbitControls(camera, renderer.domElement)
+controls.enabled = true
+
+scene.add(...LightMaker(), GroundMaker())
+
+resizeHandler(camera, renderer, cameraDistance)
 animate()
 
+document.getElementById("toggleControl").onclick = () => {
+  controls.enabled = !controls.enabled
+}
+document.getElementById("toggleRotation").onclick = () => {
+  isRotation = !isRotation
+}
+
+const loader = GlbLoader()
+
+loader.load("assets/trees.glb", (glb) => {
+  trees = glb.scene
+
+  const format = THREE.RedFormat
+  const colors = new Uint8Array(4)
+  for (let c = 0; c <= colors.length; c++) {
+    colors[c] = (c / colors.length) * 256
+  }
+  const gradientMap = new THREE.DataTexture(colors, colors.length, 1, format)
+  gradientMap.needsUpdate = true
+  
+  const geo = new THREE.BoxGeometry(1, 1, 1)
+  const material = new THREE.MeshToonMaterial()
+  material.gradientMap = gradientMap
+  material.color = '#009600'
+
+  const mesh = new THREE.Mesh(geo, material)
+  
+  trees.add(mesh)
+  trees.position.set(0, 0, 0)
+  scene.add(trees)
+})
+
 function animate() {
-  CubeRotation(cubes)
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
+  if(isRotation && trees) CubeRotation(trees)
+  requestAnimationFrame(animate)
+  renderer.render(scene, camera)
 }
