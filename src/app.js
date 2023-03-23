@@ -9,7 +9,7 @@ import { SceneInit } from "./feature/scene-init"
 import { CubeRotation } from "./makers/box-maker"
 import { LightMaker } from "./makers/light-maker"
 import { GroundMaker } from "./makers/ground-maker"
-import { TreesMaker, changeTreesColorEvent } from "./makers/trees-maker"
+// import { TreesMaker, changeTreesColorEvent } from "./makers/trees-maker"
 import { CarsMaker, changeCarsColorEvent } from "./makers/cars-maker"
 
 /** @type {'Orthographic'|'Perspective'} */
