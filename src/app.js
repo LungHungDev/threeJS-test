@@ -10,6 +10,7 @@ import { CubeRotation } from "./makers/box-maker"
 import { LightMaker } from "./makers/light-maker"
 import { GroundMaker } from "./makers/ground-maker"
 import { TreesMaker, changeTreesColorEvent } from "./makers/trees-maker"
+import { CarsMaker, changeCarsColorEvent } from "./makers/cars-maker"
 
 /** @type {'Orthographic'|'Perspective'} */
 let cameraType = "Perspective"
@@ -75,16 +76,20 @@ colors.forEach((color, index) => {
 });
 
 colorPanelStack.forEach(input => {
-  input.oninput = (event) => changeTreesColorEvent(event, scene)
+  // input.oninput = (event) => changeTreesColorEvent(event, scene)
+  input.oninput = (event) => changeCarsColorEvent(event, scene)
 });
 
 (async () => {
-  const temp = await Promise.all([
-    TreesMaker('tree01', { x:0, y:0, z:4 }, colors),
-    TreesMaker('tree02', { x:0, y:0, z:-4 }, colors)
-  ])
-  trees.push(...temp)
-  scene.add(...trees)
+  // const temp = await Promise.all([
+  //   TreesMaker('tree01', { x:0, y:0, z:4 }, colors),
+  //   TreesMaker('tree02', { x:0, y:0, z:-4 }, colors)
+  // ])
+  // trees.push(...temp)
+  // scene.add(...trees)
+
+  const cars = await CarsMaker(colors)
+  scene.add(cars)
 })()
 
 function animate() {

@@ -11,6 +11,7 @@ import { GhibliShader } from '../model/ghibli-shader'
 
 export const TreesMaker = async (name, position, colors) => {
   const glb = await asyncLoadGlb('assets/trees.glb')
+  // const glb = await asyncLoadGlb('assets/Giulettina.glb')
 
   // const material = new MeshStandardMaterial()
   // // material.color = new Color('#335941').convertLinearToSRGB()
