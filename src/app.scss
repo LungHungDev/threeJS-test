@@ -2,11 +2,32 @@ html, body {
   margin: 0;
   padding: 0;
   background: #282c34;
+  // background: url(https://i.redd.it/b6y0z6cnorf51.jpg);
+  // background-size: cover;
+  // background-repeat: no-repeat;
+  // background-position: bottom;
 }
 
-.btn-grouop {
+.btn-group {
   position: absolute;
   left: 50%;
   top: 1em;
   transform: translateX(-50%);
+}
+
+.color-panel {
+  padding: 0.5em;
+  background-color: aliceblue;
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  .color-block {
+    margin: 0 0.5em;
+    width: 30px;
+    height: 30px;
+  }
 }

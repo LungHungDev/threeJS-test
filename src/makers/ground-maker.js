@@ -8,7 +8,7 @@ export const GroundMaker = () =>{
   ground.castShadow = true
   ground.receiveShadow = true
   ground.rotation.set(-Math.PI/2, 0, 0)
-  ground.position.set(0, -1.05, 0)
+  ground.position.set(0, -3.05, 0)
 
   return ground
 }
