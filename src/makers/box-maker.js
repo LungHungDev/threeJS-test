@@ -1,11 +1,11 @@
 import { BoxGeometry, Mesh, MeshStandardMaterial } from 'three'
 
-export const BoxMaker = (position) => {
-  const box = new BoxGeometry(1, 1, 1)
-  const material = new MeshStandardMaterial({ color: 'orange' }) //0x010176
+export const BoxMaker = (size, x, y, z, color) => {
+  const box = new BoxGeometry(size, size, size)
+  const material = new MeshStandardMaterial({ color: color ?? 0x010176 })
   const cube = new Mesh(box, material)
   cube.castShadow = true
-  cube.position.set(position, 0, 0)
+  cube.position.set(x, y, z)
   return cube
 }
 

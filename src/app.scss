@@ -1,11 +1,20 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: #282c34;
+  // background: #282c34;
+  background: black;
   // background: url(https://i.redd.it/b6y0z6cnorf51.jpg);
   // background-size: cover;
   // background-repeat: no-repeat;
   // background-position: bottom;
+}
+
+.monitor-panel {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  background-color: whitesmoke;
+  color: black;
 }
 
 .btn-group {
