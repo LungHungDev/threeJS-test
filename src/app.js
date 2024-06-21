@@ -61,7 +61,7 @@ window.onload = () => {
     ...LightMaker()
     // GroundMaker()
   );
-  camera.position.set(-4, 88, -20);
+  camera.position.set(-8, 162, -38);
   camera.lookAt(scene.position);
 
   catchBtnEvent();
@@ -75,24 +75,23 @@ let startPosition; // = new THREE.Vector3(5, 5, 5);
 /** @type {Vector3|undefined} */
 let targetPosition; // = new THREE.Vector3(0, 0, 0);
 // const duration = 2000; // 2秒
-const moveValue = 2;
+const moveValue = 1;
 
 function animate() {
 
   if (group.children.length > 0) {
     group.children.forEach(point => {
       if (point instanceof THREE.Mesh) {
-        point.rotation.x += Math.floor(Math.random() * 1000) / 10000 / 10
-        point.rotation.z += Math.floor(Math.random() * 1000) / 10000 / 5
+        point.rotation.x += Math.floor(Math.random() * 1000) / 10000 / 20
+        point.rotation.z += Math.floor(Math.random() * 1000) / 10000 / 10
       }
     })
-    group.rotation.z += 0.0005
+    group.rotation.z -= 0.0005
   }
   
   if (monitorPanel) {
-    // const { x, y, z } = camera.position;
-    // monitorPanel.innerText = `${Math.floor(x)}, ${Math.floor(y)}, ${Math.floor(z)}`;
-    monitorPanel.innerText = camera.fov
+    const { x, y, z } = camera.position;
+    monitorPanel.innerText = `${Math.floor(x)}, ${Math.floor(y)}, ${Math.floor(z)}`;
   }
 
   if (startPosition && targetPosition) {
@@ -114,9 +113,12 @@ function animate() {
         targetPosition.z > camera.position.z ? moveValue : -moveValue;
     }
 
-    // 让摄像机注视目标
-
-    if (!isLoop) startPosition = targetPosition = undefined;
+    if (isLoop) {
+      if (controls.enabled) controls.enabled = false
+    } else {
+      startPosition = targetPosition = undefined;
+      controls.enabled = true
+    }
   }
   
   // 更新控制器
@@ -128,7 +130,7 @@ function animate() {
 
 function catchBtnEvent() {
   const lookPositionStack = [
-    [-4, 88, -20],
+    [-8, 162, -38],
     [151, 17, 87],
     [106, 86, -17]
   ];
@@ -149,7 +151,15 @@ function catchBtnEvent() {
 function zoomInOut(isIn) {
   const direction = new THREE.Vector3();
   camera.getWorldDirection(direction)
-  camera.position.lerp(direction, 0.6 * (isIn ? 1 : -1))
+
+  // 計算新的坐標
+  const normalizedDirection = direction.clone().normalize(); // 歸一化方向向量
+  const displacement = normalizedDirection.multiplyScalar(isIn ? 160 : -160); // 按距離縮放
+  const newPoint = camera.position.clone().add(displacement); // 加到起點上
+  startPosition = camera.position
+  targetPosition = newPoint
+  
+  // camera.position.lerp(direction, 0.6 * (isIn ? 1 : -1))
 }
 
 /** 製造光線 */
