@@ -8,20 +8,15 @@ html, body {
   // background-size: cover;
   // background-repeat: no-repeat;
   // background-position: bottom;
+  overflow: hidden;
 }
 
 .monitor-panel {
-  position: absolute;
-  top: 1em;
-  right: 1em;
   background-color: whitesmoke;
   color: black;
 }
 
 .btn-group {
-  position: absolute;
-  left: 50%;
-  top: 1em;
   transform: translateX(-50%);
 }
 
@@ -40,4 +35,19 @@ html, body {
     width: 30px;
     height: 30px;
   }
+}
+
+.title-btn {
+  position: absolute;
+  font-size: 48px;
+  color: black;
+  text-align: center;
+  background-color: white;
+  transition: letter-spacing 0.5s;
+}
+
+.title-btn:hover {
+  font-size: 56px;
+  letter-spacing: 6px;
+  text-decoration: underline;
 }
